@@ -4,16 +4,12 @@
 # Email: c.carignan@phonetik.uni-muenchen.de
 # Institution: Institute of Phonetics and Speech Processing (IPS), Ludwig-Maximilians-Universität München, Munich, Germany
 # Description:
-#   Converts an audio file to a 3D spectrogram; (optionally) saves as a stereolithography (STL) file for 3D printing
+#   Performs resampling (both under- and over-sampling) of observations in multivariate data frame
 # Arguments:
-#   inputfile (required): filepath string associated with WAV audio file
-#   outputfile (optional): filepath sring associated with STL file to save
-#   sampfreq: re-sampling frequency
-#   axisnorm: keep the x- and y-axes scaling (FALSE) or normalize so that they have the same dimensions (TRUE)
-#   preemph: value for pre-emphasis of audio
-#   window: option for windowing audio using a variety of Matlab/Octave compatible filters found in the "signal" package
-#     ex: 'bartlett', 'blackman', 'hamming', 'hanning', 'triang'
-
+#   inputdata: data frame to use in resampling
+#   groupby: string matching the column name containing the group labels to use in resampling
+#   resampnum: number of observations used as the resampling target
+#   features: a list of strings matching the column names of the features/dimensions used in creating new observations
 
 # load required libraries
 require(pracma)
@@ -40,7 +36,7 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
         print(paste0("'",groupby,"' level named '", group, "' has been kept at ", nrow(subdata), " observations"), quote=F)
         
       } else { # fewer samples than the desired number?
-        # oversample!
+        # let's oversample!
         oversamp              <- resampnum - nrow(subdata) # number of new observations to use in oversampling
         sub.scaled            <- subdata # original data to scale
         means                 <- apply(sub.scaled[,features], 2, mean) # get the original feature means
