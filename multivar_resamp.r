@@ -5,15 +5,20 @@
 # Institution: Institute of Phonetics and Speech Processing (IPS), Ludwig-Maximilians-Universität München, Munich, Germany
 # Description:
 #   Performs resampling (both under- and over-sampling) of observations in multivariate data frame
-# Arguments:
+# Input arguments:
 #   inputdata: data frame to use in resampling
 #   groupby: string matching the column name containing the group labels to use in resampling
 #   resampnum: number of observations used as the resampling target
 #   features: a list of strings matching the column names of the features/dimensions used in creating new observations
+# Output arguments:
+#   outputdata: data frame with resampled observations; 
+#               every level of 'groupby' will contain a number of observations equal to 'resampnum'
 
-# load required libraries
+
+# Load required libraries
 require(pracma)
 
+# Main function
 multivar_resamp <- function (inputdata, groupby, resampnum, features) {
 
   outputdata <- c()
