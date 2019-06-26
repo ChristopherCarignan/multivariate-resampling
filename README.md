@@ -5,7 +5,7 @@ Consider the following scenario: you have a multivariate data set containing dif
 
 You could under-sample the entire data set via random sampling, so that the number of observations in each level is equal to a small number; this isn't optimal because you throw away a lot of data in the process.
 
-You could over-sample the entire data set via random sampling, so that the number of observations in each level is equal to a large number; this isn't optimal because you create duplicate sets of multivariate features in the process, which is detrimental to, e.g., accurate training of neural networks.
+You could over-sample the entire data set via random sampling, so that the number of observations in each level is equal to a large number; this isn't optimal because you replicate feature vectors in the process, which is detrimental to, e.g., accurate training of neural networks.
 
 The R function multivar_resamp allows for resampling of a data set to a target number of observations, either under-sampling or over-sampling as appropriate. In the case of over-sampling, new observations are created in a bootstrap fashion by creating weighted averages of feature vectors of randomly selected nearest neighbors in a multidimensional space. Verification that no duplicated observations are created is included in the over-sampling process.
 
