@@ -4,7 +4,7 @@
 # Email: c.carignan@phonetik.uni-muenchen.de
 # Institution: Institute of Phonetics and Speech Processing (IPS), Ludwig-Maximilians-Universität München, Munich, Germany
 # Description:
-#   Performs resampling (both under- and over-sampling) of observations in multivariate data frame
+#   Performs resampling (both under- and over-sampling) of observations in a multivariate data frame
 # Input arguments:
 #   inputdata: data frame to use in resampling
 #   groupby: string matching the column name containing the group labels to use in resampling
