@@ -11,13 +11,13 @@ The R function multivar_resamp allows for resampling of a data set to a target n
 
 
 Example of over-sampling of feature with a uni-modal distribution:
-![unimodal](https://raw.githubusercontent.com/ChristopherCarignan/multivariate-resampling/blob/master/oversamp_unimodal.png)
+![unimodal](https://github.com/ChristopherCarignan/multivariate-resampling/blob/master/oversamp_unimodal.png)
 
 Example of over-sampling of feature with a bi-modal distribution:
-![bimodal](https://raw.githubusercontent.com/ChristopherCarignan/multivariate-resampling/blob/master/oversamp_bimodal.png)
+![bimodal](https://github.com/ChristopherCarignan/multivariate-resampling/blob/master/oversamp_bimodal.png)
 
 Example of over-sampling of feature with a multi-modal distribution:
-![multimodal](https://raw.githubusercontent.com/ChristopherCarignan/multivariate-resampling/blob/master/oversamp_multimodal.png)
+![multimodal](https://github.com/ChristopherCarignan/multivariate-resampling/blob/master/oversamp_multimodal.png)
 
 Example of over-sampling of feature with a skewed distribution:
-![skewed](https://raw.githubusercontent.com/ChristopherCarignan/multivariate-resampling/blob/master/oversamp_skewed.png)
+![skewed](https://github.com/ChristopherCarignan/multivariate-resampling/blob/master/oversamp_skewed.png)
