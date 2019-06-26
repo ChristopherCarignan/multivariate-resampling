@@ -15,7 +15,7 @@
 #               every level of 'groupby' will contain a number of observations equal to 'resampnum'
 
 # Example function call:
-# outputdat <- multivar_resamp(inputdat, "speaker", 5000, c("F1","F2","F3","P0","P1"))
+# resamp.dat <- multivar_resamp(my.dat, "speaker", 5000, c("F1","F2","F3","P0","P1"))
 
 # Load required libraries
 require(pracma)
