@@ -22,7 +22,7 @@ require(pracma)
 
 # Main function
 multivar_resamp <- function (inputdata, groupby, resampnum, features) {
-
+  
   outputdata <- c()
   for (group in unique(inputdata[[groupby]])) {
     subdata <- inputdata[inputdata[[groupby]]==group,]
@@ -46,8 +46,8 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
         # let's oversample!
         oversamp              <- resampnum - nrow(subdata) # number of new observations to use in oversampling
         sub.scaled            <- subdata # original data to scale
-        means                 <- apply(sub.scaled[,features], 2, mean) # get the original feature means
-        stdevs                <- apply(sub.scaled[,features], 2, sd) # get the original feature standard deviations
+        means                 <- apply(as.matrix(sub.scaled[,features]), 2, mean) # get the original feature means
+        stdevs                <- apply(as.matrix(sub.scaled[,features]), 2, sd) # get the original feature standard deviations
         sub.scaled[,features] <- scale(subdata[,features]) # scale the original features
         oversamp.data         <- c() # oversampled data to build
         
@@ -61,14 +61,14 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
           dists     <- as.numeric(pracma::distmat(as.matrix(this.samp[, features]), as.matrix(other.samps[, features])))
           # find the neighbors nearest to the selected observation
           # number of nearest neighbors = 1% of total number of original observations
-          neighbors <- sort(dists)[1:round(nrow(subdata) * 0.01)]
+          neighbors <- sort(dists)[1:ceil(nrow(subdata) * 0.01)]
           
           # while loop which ensures that no duplicate observations are created in the oversampling process
           n.check <- 0
           while (n.check == 0) {
             # randomly select one of the nearest neighbors
             n.dist    <- sample(neighbors, 1)
-            neighbor  <- which(dists == n.dist)
+            neighbor  <- which(dists == n.dist)[1]
             
             # create a new observation by calculating a weighted average of the feature vectors 
             # associated with the selected observation and its selected nearest neighbor
