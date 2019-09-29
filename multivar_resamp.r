@@ -62,8 +62,8 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
           # ignore possible duplicates in original data frame
           dists <- dists > 0
           # find the neighbors nearest to the selected observation
-          # number of nearest neighbors = 1% of total number of original observations
-          neighbors <- sort(dists)[1:ceil(nrow(subdata) * 0.01)]
+          # number of nearest neighbors = 5% of total number of original observations
+          neighbors <- sort(dists)[1:ceil(nrow(subdata) * 0.05)]
           
           # while loop which ensures that no duplicate observations are created in the oversampling process
           n.check <- 0
