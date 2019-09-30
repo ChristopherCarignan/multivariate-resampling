@@ -60,7 +60,7 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
           # calculate Euclidean distances between the selected observation and all other observations
           dists <- as.numeric(pracma::distmat(as.matrix(this.samp[, features]), as.matrix(other.samps[, features])))
           # ignore possible duplicates in original data frame
-          dists <- dists > 0
+          dists <- dists[dists > 0]
           # find the neighbors nearest to the selected observation
           # number of nearest neighbors = 5% of total number of original observations
           neighbors <- sort(dists)[1:ceil(nrow(subdata) * 0.05)]
