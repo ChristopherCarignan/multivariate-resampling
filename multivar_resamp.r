@@ -17,9 +17,6 @@
 # Example function call:
 # resamp.dat <- multivar_resamp(my.dat, "speaker", 5000, c("F1","F2","F3","P0","P1"))
 
-# Load required libraries
-require(pracma)
-
 # Main function
 multivar_resamp <- function (inputdata, groupby, resampnum, features) {
   
@@ -54,11 +51,12 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
         for (samp in 1:oversamp) {
           # randomly choose an observation from the scaled feature matrix
           this.samp   <- sub.scaled[sample(nrow(sub.scaled), 1), ]
+          
           # select all of the OTHER observations from the scaled feature matrix
           other.samps <- sub.scaled[which(row.names(sub.scaled)!=row.names(this.samp)), ]
           
           # calculate Euclidean distances between the selected observation and all other observations
-          dists <- as.numeric(pracma::distmat(as.matrix(this.samp[, features]), as.matrix(other.samps[, features])))
+          dists <- apply(as.matrix(other.samps[,features]), 1, function(x) sqrt(sum((x - as.matrix(this.samp[,features]))^2)))
           
           # sort by distance
           neighbors <- sort(dists)
@@ -66,19 +64,20 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
           # while loop which ensures that no duplicate observations are created in the oversampling process
           n.check <- 0
           while (n.check == 0) {
-            # select one of the nearest neighbors from a Gaussian PDF, ignoring possible duplicates in two steps
+            # select one of the neighbors from within a Gaussian PDF
+            # possible duplicates are ignored in two steps
             n.dist    <- sample(neighbors[neighbors>0], 
                                 prob = dnorm(1:length(neighbors[neighbors>0]),0,round(0.3413*length(neighbors[neighbors>0]))),
                                 size = 1)
             neighbor  <- which(dists == n.dist)[1]
             
             # create a new observation by calculating a weighted average of the feature vectors 
-            # associated with the selected observation and its selected nearest neighbor
+            # associated with the selected observation and its selected neighbor
             s.dist <- (n.dist-min(dists))/diff(range(dists))
             
             new.features <- (
-              (s.dist * (sub.scaled[which(row.names(sub.scaled)==row.names(other.samps[neighbor,])), features])) +
-                ((1-s.dist) * (sub.scaled[which(row.names(sub.scaled)==row.names(this.samp)), features]))
+              s.dist * (sub.scaled[which(row.names(sub.scaled)==row.names(other.samps[neighbor,])), features]) +
+                (1-s.dist) * (sub.scaled[which(row.names(sub.scaled)==row.names(this.samp)), features])
             )
             
             # convert weighted features back to their respective original scales
@@ -92,7 +91,7 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
             dup.check <- duplicated(rbind(oversamp.data,this.samp))
             
             # if it is NOT a duplicate, exit the loop and add it to the data frame
-            # if it IS a duplicate, run this loop again with a different nearest neighbor
+            # if it IS a duplicate, run this loop again with a different neighbor
             if (length(dup.check[dup.check==TRUE])==0) {
               n.check <- 1
             }
