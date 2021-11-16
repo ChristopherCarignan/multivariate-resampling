@@ -59,18 +59,16 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
           
           # calculate Euclidean distances between the selected observation and all other observations
           dists <- as.numeric(pracma::distmat(as.matrix(this.samp[, features]), as.matrix(other.samps[, features])))
-          # ignore possible duplicates in original data frame
-          dists <- dists[dists > 0]
-          # find the neighbors nearest to the selected observation
-          # number of nearest neighbors = 5% of total number of original observations
-          neighbors <- sort(dists)[1:ceil(nrow(subdata) * 0.05)]
+          
+          # sort by distance
+          neighbors <- sort(dists)
           
           # while loop which ensures that no duplicate observations are created in the oversampling process
           n.check <- 0
           while (n.check == 0) {
-            # randomly select one of the nearest neighbors
-            n.dist    <- sample(neighbors, 
-                                prob = dnorm(1:length(neighbors),0,round(0.3413*length(neighbors))),
+            # select one of the nearest neighbors from a Gaussian PDF, ignoring possible duplicates in two steps
+            n.dist    <- sample(neighbors[neighbors>0], 
+                                prob = dnorm(1:length(neighbors[neighbors>0]),0,round(0.3413*length(neighbors[neighbors>0]))),
                                 size = 1)
             neighbor  <- which(dists == n.dist)[1]
             
