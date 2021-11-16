@@ -69,15 +69,19 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
           n.check <- 0
           while (n.check == 0) {
             # randomly select one of the nearest neighbors
-            n.dist    <- sample(neighbors, 1)
+            n.dist    <- sample(neighbors, 
+                                prob = dnorm(1:length(neighbors),0,round(0.3413*length(neighbors))),
+                                size = 1)
             neighbor  <- which(dists == n.dist)[1]
             
             # create a new observation by calculating a weighted average of the feature vectors 
             # associated with the selected observation and its selected nearest neighbor
+            s.dist <- (n.dist-min(dists))/diff(range(dists))
+            
             new.features <- (
-              sub.scaled[which(row.names(sub.scaled)==row.names(other.samps[neighbor,])), features] / n.dist + 
-                sub.scaled[which(row.names(sub.scaled)==row.names(this.samp)), features] * n.dist
-            ) / (n.dist + 1/n.dist) 
+              (s.dist * (sub.scaled[which(row.names(sub.scaled)==row.names(other.samps[neighbor,])), features])) +
+                ((1-s.dist) * (sub.scaled[which(row.names(sub.scaled)==row.names(this.samp)), features]))
+            )
             
             # convert weighted features back to their respective original scales
             # using the means and standard deviations of the original features
