@@ -48,6 +48,10 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
         sub.scaled[,features] <- scale(subdata[,features]) # scale the original features
         oversamp.data         <- c() # oversampled data to build
         
+        # set zero-variance columns to 0
+        zero.vars <- unique(which(is.na(sub.scaled), arr.ind=T)[,2])
+        sub.scaled[,zero.vars] <- 0
+        
         for (samp in 1:oversamp) {
           # randomly choose an observation from the scaled feature matrix
           this.samp   <- sub.scaled[sample(nrow(sub.scaled), 1), ]
@@ -99,6 +103,9 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
           # add new observation to data frame
           oversamp.data <- rbind(oversamp.data,this.samp)
         }
+        # replace zero-variance columns with original data
+        oversamp.data[,zero.vars] <- unique(subdata[,zero.vars])
+        
         # add oversampled data to original data frame
         newdata <- rbind(subdata,oversamp.data)
         
