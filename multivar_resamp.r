@@ -76,12 +76,14 @@ multivar_resamp <- function (inputdata, groupby, resampnum, features) {
             neighbor  <- which(dists == n.dist)[1]
             
             # create a new observation by calculating a weighted average of the feature vectors 
-            # associated with the selected observation and its selected neighbor
+            # associated with the selected observation and its selected neighbor:
+            # the farther the distance, the more the features resemble the selected observation
+            # the closter the distance, the more the features resemble the selected neighbor
             s.dist <- (n.dist-min(dists))/diff(range(dists))
             
             new.features <- (
-              s.dist * (sub.scaled[which(row.names(sub.scaled)==row.names(other.samps[neighbor,])), features]) +
-                (1-s.dist) * (sub.scaled[which(row.names(sub.scaled)==row.names(this.samp)), features])
+              (1-s.dist) * (sub.scaled[which(row.names(sub.scaled)==row.names(other.samps[neighbor,])), features]) +
+                s.dist * (sub.scaled[which(row.names(sub.scaled)==row.names(this.samp)), features])
             )
             
             # convert weighted features back to their respective original scales
