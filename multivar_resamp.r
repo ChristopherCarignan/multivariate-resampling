@@ -16,6 +16,11 @@
 
 # Example function call:
 # resamp.dat <- multivar_resamp(my.dat, "speaker", 5000, c("F1","F2","F3","P0","P1"))
+ 
+# Changelog
+# 2023-07-15: updated code to handle zero-variance columns/varables
+# 2023-07-20: swapped weighting to bias against large distances between selected observations
+
 
 # Main function
 multivar_resamp <- function (inputdata, groupby, resampnum, features) {
